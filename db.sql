@@ -26,9 +26,11 @@ create table posts (
 	titre varchar(80) not null,
 	contenu varchar(500) not null,
 	user_id int(20) unsigned not null,
+	tag_id int(20) unsigned not null,
 	contact varchar(80) not null,
 	img blob null,
 	image varchar(200) null,
+	foreign key (tag_id) references tags(id) on delete restrict,
 	foreign key (user_id) references users(id) on delete restrict
 );
 
@@ -38,12 +40,4 @@ create table sensor (
 	temperature float not null,
 	humidity float not null,
 	pressure float not null
-);
-
-Create table post_tag (
-	id int(10) unsigned not null auto_increment primary key, 
-	post_id int(10) unsigned not null, 
-	tag_id int(10) unsigned not null, 
-	foreign key (post_id) references posts(id) on delete restrict, 
-	foreign key (tag_id) references tags(id) on delete restrict
 );
