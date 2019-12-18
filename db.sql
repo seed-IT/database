@@ -1,46 +1,49 @@
-CREATE TABLE UTILISATEUR(
-ID_UTIL int not null auto_increment,
-NAME varchar(20) not null,
-LASTNAME varchar(20) not null,
-DATE_NAISS date not null,
-MAIL varchar(40) not null,
-PASSWORD varchar(20) not null,
-SUBSCRIPTION varchar(20) DEFAULT "free",
-PRIMARY KEY (ID_UTIL)
+create table users (
+	id int(20) unsigned not null auto_increment primary key,
+	name varchar(255) not null,
+	email varchar(255) not null unique,
+	email_verified_at timestamp null,
+	password varchar(255) not null,
+	admin int(1) not null default(0),
+	remember_token varchar(100) null,
+	created_at timestamp null,
+	updated_at timestamp null,
+	prime int(11) not null default(0)
+);
+	
+create table tags (
+	id int(10) unsigned not null auto_increment primary key,
+	created_at timestamp null,
+	updated_at timestamp null,
+	tag varchar(50) not null unique,
+	tag_url varchar(60) not null unique
 );
 
-
-CREATE TABLE GRAINE(
-ID_GRAINE INT NOT NULL auto_increment,
-NAME_GRAINE VARCHAR(20) NOT NULL,
-DESCRIPTION VARCHAR(100),
-PICTURE BLOB DEFAULT NULL,
-TIPS VARCHAR(200),
-PRIMARY KEY(ID_GRAINE)
+create table posts (
+	id int(10) unsigned not null auto_increment primary key,
+	created_at timestamp null,
+	updated_at timestamp null,
+	titre varchar(80) not null,
+	contenu varchar(500) not null,
+	user_id int(20) unsigned not null,
+	contact varchar(80) not null,
+	img blob null,
+	image varchar(200) null,
+	foreign key (user_id) references users(id) on delete restrict
 );
 
-
-CREATE TABLE TRANSACTION(
-ID_TRANSACTION INT NOT NULL auto_increment,
-ID_PRENEUR INT,
-ID_DONNEUR INT,
-ID_GRAINE INT,
-DATE_TRANSACTION DATE,
-QUANTITY INT NOT NULL,
-PRIMARY KEY(ID_TRANSACTION),
-FOREIGN KEY(ID_GRAINE) REFERENCES GRAINE (ID_GRAINE),
-FOREIGN KEY(ID_PRENEUR) REFERENCES UTILISATEUR(ID_UTIL),
-FOREIGN KEY(ID_DONNEUR) REFERENCES UTILISATEUR(ID_UTIL)
+create table sensor (
+	id int(20) unsigned not null primary key auto_increment,
+	date_time datetime not null,
+	temperature float not null,
+	humidity float not null,
+	pressure float not null
 );
 
-
-CREATE TABLE PROPRIETAIRE(
-ID_PROPRIETAIRE int not null auto_increment,
-ID_GRAINE int not null,
-ID_UTIL int not null,
-QTT int not null,
-RANG int not null,
-PRIMARY KEY (ID_PROPRIETAIRE),
-FOREIGN KEY (ID_GRAINE) REFERENCES GRAINE(ID_GRAINE),
-FOREIGN KEY (ID_UTIL) REFERENCES UTILISATEUR(ID_UTIL)
+Create table post_tag (
+	id int(10) unsigned not null auto_increment primary key, 
+	post_id int(10) unsigned not null, 
+	tag_id int(10) unsigned not null, 
+	foreign key (post_id) references posts(id) on delete restrict, 
+	foreign key (tag_id) references tags(id) on delete restrict
 );
